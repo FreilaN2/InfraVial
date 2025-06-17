@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Usuario - Vial Barinas</title>
+    <title>Panel de SuperAdmin - Vial Barinas</title>
 
     <!-- Bootstrap CSS local -->
     <link href="/VialBarinas/Public/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -29,6 +29,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/VialBarinas/PHP/frontend/admin_panel.php">
                         <i class="bi bi-house"></i> Inicio
+                    </a>
+                </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="/VialBarinas/PHP/frontend/lista_usuarios.php">
+                        <i class="bi bi-list-ul"></i> Usuarios Registrados
                     </a>
                 </li>
                 </li>
