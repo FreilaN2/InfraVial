@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     [inputs.nombre, inputs.apellido].forEach(input => {
         input.addEventListener('input', () => {
             input.value = input.value.replace(/[^a-zA-ZÁÉÍÓÚÑñáéíóú ]/g, '');
-            errores[input.name].textContent = input.value.trim().length < 5 ? "Debe tener al menos 5 caracteres" : "";
+            errores[input.name].textContent = input.value.trim().length < 3 ? "Debe tener al menos 3 caracteres" : "";
         });
     });
 
