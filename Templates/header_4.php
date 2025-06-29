@@ -1,3 +1,11 @@
+<?php
+require_once __DIR__ . '/../database.php'; // ajusta ruta si es necesario
+
+$queryPendientes = "SELECT COUNT(*) as total FROM reportes WHERE estado = 'pendiente'";
+$resultPendientes = $conn->query($queryPendientes);
+$pendientes = $resultPendientes->fetch_assoc()['total'];
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -33,7 +41,8 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/VialBarinas/PHP/frontend/autoridad_gestionar.php">
-                        <i class="bi bi-wrench-adjustable"></i> Reportes Pendientes
+                        <i class="bi bi-wrench-adjustable"></i> Reportes Pendientes 
+                        <span class="badge bg-danger"><?php echo $pendientes; ?></span>
                     </a>
                 </li>
                 <li class="nav-item">
