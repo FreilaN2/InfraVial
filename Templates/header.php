@@ -17,26 +17,14 @@
 <!-- Navbar principal -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/VialBarinas/index.php">
-            <i class="bi bi-geo-alt-fill"></i> InfraVial
+        <a  href="/VialBarinas/index.php">
+            <img src="/VialBarinas/Assets/img/SIMPLE.svg" alt="InfraVial" style="width: 170px; height: 40px; vertical-align: middle;">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-                <?php if (isset($_SESSION['usuario_id'])): ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/VialBarinas/frontend/dashboard.php">
-                            <i class="bi bi-speedometer2"></i> Panel
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/VialBarinas/backend/logout.php">
-                            <i class="bi bi-box-arrow-right"></i> Cerrar sesión
-                        </a>
-                    </li>
-                <?php else: ?>
                     <li class="nav-item">
                     <a class="nav-link" href="/VialBarinas/PHP/frontend/login_view.php">
                         <i class="bi bi-person-circle"></i> Iniciar sesión
@@ -47,8 +35,6 @@
                         <i class="bi bi-person-plus"></i> Registrarse
                     </a>
                 </li>
-
-                <?php endif; ?>
             </ul>
         </div>
     </div>

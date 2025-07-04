@@ -26,8 +26,8 @@ $pendientes = $resultPendientes->fetch_assoc()['total'];
 <!-- Navbar para autoridad -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="/VialBarinas/PHP/frontend/autoridad_panel.php">
-            <i class="bi bi-geo-alt-fill"></i> InfraVial
+        <a  href="/VialBarinas/PHP/frontend/autoridad_panel.php">
+            <img src="/VialBarinas/Assets/img/SIMPLE.svg" alt="InfraVial" style="width: 170px; height: 40px; vertical-align: middle;">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarUser">
             <span class="navbar-toggler-icon"></span>

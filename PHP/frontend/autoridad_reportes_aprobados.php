@@ -98,12 +98,13 @@ $result = $conn->query($query);
                         </span>
                     </td>
                     <td>
-                        <form action="/VialBarinas/PHP/backend/actualizar_estado.php" method="POST">
-                            <input type="hidden" name="reporte_id" value="<?= $row['id'] ?>">
-                            <button name="accion" value="resolver" class="btn btn-warning btn-sm rounded-pill">
-                                <i class="bi bi-check2-square"></i> Marcar como resuelto
-                            </button>
-                        </form>
+                    <form action="/VialBarinas/PHP/backend/actualizar_estado.php" method="POST">
+                        <input type="hidden" name="reporte_id" value="<?= $row['id'] ?>">
+                        <input type="hidden" name="prioridad" value="<?= $row['prioridad'] ?>">
+                        <button name="accion" value="resolver" class="btn btn-warning btn-sm rounded-pill">
+                            <i class="bi bi-check2-square"></i> Marcar como resuelto
+                        </button>
+                    </form>
                     </td>
                 </tr>
             <?php endwhile; ?>

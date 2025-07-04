@@ -31,9 +31,19 @@
             <input type="hidden" name="longitud" id="longitud" required>
         </div>
 
-        <div class="mb-3">
-            <label for="foto" class="form-label">Fotografía del incidente</label>
-            <input type="file" name="foto" id="foto" class="form-control" accept="image/*" required>
+        <!-- Botones para cargar imagen -->
+        <div class="mb-3 text-center">
+            <button type="button" class="btn btn-primary me-2" onclick="document.getElementById('foto_camara').click()">
+                <i class="bi bi-camera"></i> Tomar Foto
+            </button>
+            <button type="button" class="btn btn-secondary" onclick="document.getElementById('foto_galeria').click()">
+                <i class="bi bi-image"></i> Elegir de la Galería
+            </button>
+            <span id="foto-seleccionada" class="ms-2 text-success"></span>
+
+            <!-- Inputs invisibles -->
+            <input type="file" name="foto" id="foto_camara" class="form-control d-none" accept="image/*" capture="environment" required>
+            <input type="file" id="foto_galeria" class="form-control d-none" accept="image/*">
         </div>
 
         <div class="text-center">
@@ -117,6 +127,26 @@
 
             map.removeLayer(marker);
             marker = L.marker([lat, lng], { icon: iconMap[tipo] }).addTo(map);
+        }
+    });
+
+    // Si se selecciona desde la cámara
+    document.getElementById('foto_camara').addEventListener('change', function () {
+        if (this.files.length > 0) {
+            document.getElementById('foto-seleccionada').textContent = "Foto tomada ✔";
+        }
+    });
+
+    // Si se selecciona desde la galería → reemplaza al input original
+    document.getElementById('foto_galeria').addEventListener('change', function () {
+        const file = this.files[0];
+        if (file) {
+            const camaraInput = document.getElementById('foto_camara');
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            camaraInput.files = dataTransfer.files;
+
+            document.getElementById('foto-seleccionada').textContent = "Foto de galería seleccionada ✔";
         }
     });
 </script>
