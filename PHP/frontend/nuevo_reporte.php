@@ -46,7 +46,15 @@
             <input type="file" id="foto_galeria" class="form-control d-none" accept="image/*">
         </div>
 
-        <div class="text-center">
+        <!-- Vista previa -->
+        <div id="preview-container" class="mt-3 text-center d-none">
+            <div style="position: relative; display: inline-block;">
+                <img id="preview-img" src="#" alt="Vista previa" class="img-thumbnail shadow" style="max-width: 300px; max-height: 200px; border-radius: 10px;">
+                <button type="button" onclick="borrarImagen()" class="btn-close position-absolute top-0 end-0 m-1" aria-label="Cerrar" style="background-color: white;"></button>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
             <button type="submit" class="btn btn-success">
                 <i class="bi bi-send"></i> Enviar Reporte
             </button>
@@ -130,14 +138,31 @@
         }
     });
 
-    // Si se selecciona desde la cámara
+    function mostrarPreview(file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const previewImg = document.getElementById('preview-img');
+            previewImg.src = e.target.result;
+            document.getElementById('preview-container').classList.remove('d-none');
+            document.getElementById('foto-seleccionada').textContent = "Imagen cargada ✔";
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function borrarImagen() {
+        document.getElementById('foto_camara').value = '';
+        document.getElementById('foto_galeria').value = '';
+        document.getElementById('preview-img').src = '#';
+        document.getElementById('preview-container').classList.add('d-none');
+        document.getElementById('foto-seleccionada').textContent = "";
+    }
+
     document.getElementById('foto_camara').addEventListener('change', function () {
         if (this.files.length > 0) {
-            document.getElementById('foto-seleccionada').textContent = "Foto tomada ✔";
+            mostrarPreview(this.files[0]);
         }
     });
 
-    // Si se selecciona desde la galería → reemplaza al input original
     document.getElementById('foto_galeria').addEventListener('change', function () {
         const file = this.files[0];
         if (file) {
@@ -146,7 +171,7 @@
             dataTransfer.items.add(file);
             camaraInput.files = dataTransfer.files;
 
-            document.getElementById('foto-seleccionada').textContent = "Foto de galería seleccionada ✔";
+            mostrarPreview(file);
         }
     });
 </script>

@@ -42,7 +42,7 @@ $pendientes = $resultPendientes->fetch_assoc()['total'];
                 <li class="nav-item">
                     <a class="nav-link" href="/VialBarinas/PHP/frontend/autoridad_gestionar.php">
                         <i class="bi bi-wrench-adjustable"></i> Reportes Pendientes 
-                        <span class="badge bg-danger"><?php echo $pendientes; ?></span>
+                        <span id="badge-pendientes" class="badge bg-danger"><?php echo $pendientes; ?></span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -88,6 +88,71 @@ $pendientes = $resultPendientes->fetch_assoc()['total'];
             }
         });
     });
+</script>
+
+<audio id="alerta-audio" src="/VialBarinas/Assets/alerta.mp3" preload="auto"></audio>
+
+<script>
+let ultimaID = localStorage.getItem('ultimaID') ? parseInt(localStorage.getItem('ultimaID')) : 17;
+
+// Permitir sonido luego de interacción
+document.addEventListener('click', () => {
+    const audio = document.getElementById('alerta-audio');
+    if (audio) {
+        audio.play().then(() => {
+            audio.pause();
+            audio.currentTime = 0;
+        }).catch(() => {});
+    }
+}, { once: true });
+
+// Verificar si hay un nuevo reporte
+function verificarNuevosReportes() {
+    fetch(`/VialBarinas/PHP/backend/verificar_nuevos_reportes.php?ultima_id=${ultimaID}`)
+        .then(res => res.json())
+        .then(data => {
+            if (data.nuevo && data.id > ultimaID) {
+                ultimaID = data.id;
+                localStorage.setItem('ultimaID', ultimaID);
+
+                // Mostrar alerta visual (toast)
+                const toast = document.createElement('div');
+                toast.className = 'toast align-items-center text-bg-danger border-0 show position-fixed bottom-0 end-0 m-4';
+                toast.innerHTML = `
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            📢 ¡Nuevo reporte pendiente recibido!
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                    </div>`;
+                document.body.appendChild(toast);
+
+                // Reproducir sonido
+                const audio = document.getElementById('alerta-audio');
+                audio.play().catch(() => console.warn('Autoplay bloqueado'));
+            }
+
+            // Actualizar el contador visual
+            actualizarContador();
+        }).catch(err => console.error("Error al verificar reportes:", err));
+}
+
+// Actualizar el número de reportes pendientes (badge)
+function actualizarContador() {
+    fetch(`/VialBarinas/PHP/backend/contador_pendientes.php`)
+        .then(res => res.json())
+        .then(data => {
+            const badge = document.getElementById('badge-pendientes');
+            if (badge) {
+                badge.textContent = data.total;
+                badge.style.display = data.total === 0 ? 'none' : 'inline-block';
+            }
+        }).catch(err => console.error("Error al actualizar contador:", err));
+}
+
+// Llamadas periódicas
+actualizarContador();
+setInterval(verificarNuevosReportes, 10000); // cada 10 segundos
 </script>
 
 <main class="container mt-4">
