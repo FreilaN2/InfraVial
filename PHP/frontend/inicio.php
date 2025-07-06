@@ -64,7 +64,7 @@ while ($row = $resultMap->fetch_assoc()) {
                     </p>
                     <div class="d-flex gap-2 mt-2">
                         <span class="badge bg-<?= $estatusColor ?>"><?= ucfirst($estatus) ?></span>
-                        <small class="text-muted">Prioridad:</small>
+                        <small class="text-muted">Gravedad:</small>
                         <span class="badge bg-<?= $prioridadColor ?>"><?= ucfirst($prioridad) ?></span>
                     </div>
                 </div>

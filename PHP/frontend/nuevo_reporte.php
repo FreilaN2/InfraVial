@@ -20,6 +20,8 @@
                 <option value="Bache">Bache</option>
                 <option value="Señal">Señal</option>
                 <option value="Semáforo">Semáforo</option>
+                <option value="Alcantarilla">Alcantarilla</option>
+                <option value="Acera">Acera</option>
                 <option value="Otro">Otro</option>
             </select>
         </div>
@@ -82,6 +84,18 @@
         }),
         'Semáforo': L.icon({
             iconUrl: '/VialBarinas/Assets/icons/semaforo.png',
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32]
+        }),
+        'Alcantarilla': L.icon({
+            iconUrl: '/VialBarinas/Assets/icons/alcantarilla.png',
+            iconSize: [32, 32],
+            iconAnchor: [16, 32],
+            popupAnchor: [0, -32]
+        }),
+        'Acera': L.icon({
+            iconUrl: '/VialBarinas/Assets/icons/acera.png',
             iconSize: [32, 32],
             iconAnchor: [16, 32],
             popupAnchor: [0, -32]
