@@ -8,10 +8,6 @@
     <!-- Columna izquierda con imagen o mensaje -->
     <div class="col-md-6 d-none d-md-block p-0">
         <div class="h-100 w-100 login-left-bg">
-            <!-- Puedes usar una imagen de fondo en CSS con la clase login-left-bg -->
-            <!-- O si prefieres directo en HTML:
-            <img src="/VialBarinas/Assets/img/login-bg.webp" class="w-100 h-100 object-fit-cover" alt="Imagen"> 
-            -->
         </div>
     </div>
 
@@ -43,6 +39,26 @@
         </div>
     </div>
 </div>
+
+<?php if (isset($_GET['registro']) && $_GET['registro'] === 'exitoso'): ?>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        Swal.fire({
+            icon: 'success',
+            title: '¡Registro exitoso!',
+            text: 'Ya puedes iniciar sesión.',
+            timer: 3000,
+            showConfirmButton: false,
+            timerProgressBar: true
+        });
+
+        const url = new URL(window.location);
+        url.searchParams.delete('registro');
+        window.history.replaceState({}, document.title, url.toString());
+    });
+</script>
+<?php endif; ?>
+
 
 <?php if (isset($_GET['error'])): ?>
 <script>

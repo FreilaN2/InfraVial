@@ -145,7 +145,6 @@ function actualizarContador() {
             const badge = document.getElementById('badge-pendientes');
             if (badge) {
                 badge.textContent = data.total;
-                badge.style.display = data.total === 0 ? 'none' : 'inline-block';
             }
         }).catch(err => console.error("Error al actualizar contador:", err));
 }

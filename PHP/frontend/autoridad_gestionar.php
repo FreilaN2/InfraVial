@@ -95,21 +95,35 @@ $result = $conn->query($query);
                             <?= ucfirst($row['estatus']) ?>
                         </span>
                     </td>
-                    <td>
-                        <form action="/VialBarinas/PHP/backend/actualizar_estado.php" method="POST" class="d-grid gap-2">
-                            <input type="hidden" name="reporte_id" value="<?= $row['id'] ?>">
-                            <select name="prioridad" class="form-select form-select-sm rounded-pill" required>
-                                <option value="" selected disabled>-- Seleccionar --</option>
-                                <option value="alta">Alta</option>
-                                <option value="media">Media</option>
-                                <option value="baja">Baja</option>
-                            </select>
-                            <div class="d-flex gap-1 justify-content-center">
-                                <button name="accion" value="aprobar" class="btn btn-success btn-sm rounded-pill">Aprobar</button>
-                                <button name="accion" value="rechazar" class="btn btn-danger btn-sm rounded-pill">Rechazar</button>
+                        <td class="text-center">
+                            <div class="d-flex flex-column gap-2">
+                                <!-- Aprobar -->
+                                <form method="POST" action="/VialBarinas/PHP/backend/actualizar_estado.php" class="accion-form">
+                                    <input type="hidden" name="reporte_id" value="<?= $row['id'] ?>">
+                                    <input type="hidden" name="accion" value="aprobar">
+
+                                    <select name="prioridad" class="form-select form-select-sm rounded-pill mb-1" required>
+                                        <option value="" selected disabled>-- Seleccionar --</option>
+                                        <option value="alta">Alta</option>
+                                        <option value="media">Media</option>
+                                        <option value="baja">Baja</option>
+                                    </select>
+
+                                    <button type="button" class="btn btn-success btn-sm rounded-pill w-100" onclick="confirmarAccion(this)">
+                                        Aprobar
+                                    </button>
+                                </form>
+
+                                <!-- Rechazar -->
+                                <form method="POST" action="/VialBarinas/PHP/backend/actualizar_estado.php" class="accion-form">
+                                    <input type="hidden" name="reporte_id" value="<?= $row['id'] ?>">
+                                    <input type="hidden" name="accion" value="rechazar">
+                                    <button type="button" class="btn btn-danger btn-sm rounded-pill w-100" onclick="confirmarAccion(this)">
+                                        Rechazar
+                                    </button>
+                                </form>
                             </div>
-                        </form>
-                    </td>
+                        </td>
                 </tr>
             <?php endwhile; ?>
             </tbody>
@@ -118,5 +132,90 @@ $result = $conn->query($query);
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<?php if (isset($_GET['error']) && $_GET['error'] === 'sin_prioridad'): ?>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'warning',
+        title: 'Debe seleccionar una prioridad al aprobar.',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true
+    });
+
+    // Limpiar la URL sin recargar
+    const url = new URL(window.location);
+    url.searchParams.delete('error');
+    window.history.replaceState({}, document.title, url);
+});
+</script>
+<?php endif; ?>
+
+
+<script>
+function confirmarAccion(button) {
+    const form = button.closest('form');
+    const accion = form.querySelector('input[name="accion"]').value;
+
+    const mensajes = {
+        aprobar: {
+            titulo: '¿Aprobar reporte?',
+            texto: 'Este reporte pasará a estado aprobado.'
+        },
+        rechazar: {
+            titulo: '¿Rechazar reporte?',
+            texto: 'Este reporte será marcado como rechazado.'
+        }
+    };
+
+    Swal.fire({
+        icon: 'question',
+        title: mensajes[accion].titulo,
+        text: mensajes[accion].texto,
+        showCancelButton: true,
+        confirmButtonText: 'Confirmar',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            form.submit();
+        }
+    });
+}
+</script>
+
+<?php if (isset($_GET['exito'])): ?>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    let mensaje = '';
+    if ('<?= $_GET['exito'] ?>' === 'aprobado') {
+        mensaje = 'Reporte aprobado correctamente.';
+    } else if ('<?= $_GET['exito'] ?>' === 'rechazado') {
+        mensaje = 'Reporte rechazado correctamente.';
+    }
+
+    if (mensaje) {
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'success',
+            title: mensaje,
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true
+        });
+
+        const url = new URL(window.location);
+        url.searchParams.delete('exito');
+        window.history.replaceState({}, document.title, url);
+    }
+});
+</script>
+<?php endif; ?>
+
+
 
 <?php include_once('../../Templates/footer.php'); ?>

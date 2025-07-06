@@ -82,6 +82,8 @@ const iconMap = {
     'Señal': L.icon({ iconUrl: '/VialBarinas/Assets/icons/senal.png', iconSize: [32, 32], iconAnchor: [16, 32] }),
     'Puente': L.icon({ iconUrl: '/VialBarinas/Assets/icons/puente.png', iconSize: [32, 32], iconAnchor: [16, 32] }),
     'Semáforo': L.icon({ iconUrl: '/VialBarinas/Assets/icons/semaforo.png', iconSize: [32, 32], iconAnchor: [16, 32] }),
+    'Alcantarilla': L.icon({ iconUrl: '/VialBarinas/Assets/icons/alcantarilla.png', iconSize: [32, 32], iconAnchor: [16, 32] }),
+    'Acera': L.icon({ iconUrl: '/VialBarinas/Assets/icons/acera.png', iconSize: [32, 32], iconAnchor: [16, 32] }),
     'Otro': L.icon({ iconUrl: '/VialBarinas/Assets/icons/otro.png', iconSize: [32, 32], iconAnchor: [16, 32] }),
 };
 

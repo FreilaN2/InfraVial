@@ -13,8 +13,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $accion = $_POST['accion'] ?? null;
     $prioridad = $_POST['prioridad'] ?? null;
 
-    if (!$reporte_id || !$accion || !$prioridad) {
+    if (!$reporte_id || !$accion) {
         die('Datos incompletos.');
+    }
+
+    if ($accion === 'aprobar' && empty($prioridad)) {
+        header('Location: /VialBarinas/PHP/frontend/autoridad_gestionar.php?error=sin_prioridad');
+        exit;
     }
 
     $estado = '';
@@ -23,10 +28,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     switch ($accion) {
         case 'aprobar':
             $estado = 'aprobado';
-            break;
+
+            $stmt = $conn->prepare("UPDATE reportes SET estado = ?, estatus = ?, prioridad = ? WHERE id = ?");
+            $stmt->bind_param("sssi", $estado, $estatus, $prioridad, $reporte_id);
+
+            if ($stmt->execute()) {
+                header('Location: /VialBarinas/PHP/frontend/autoridad_gestionar.php?exito=aprobado');
+                exit();
+            } else {
+                echo "Error al aprobar el reporte: " . $stmt->error;
+            }
+            exit();
+
         case 'rechazar':
             $estado = 'rechazado';
-            break;
+
+            $stmt = $conn->prepare("UPDATE reportes SET estado = ?, estatus = ?, prioridad = NULL WHERE id = ?");
+            $stmt->bind_param("ssi", $estado, $estatus, $reporte_id);
+
+            if ($stmt->execute()) {
+                header('Location: /VialBarinas/PHP/frontend/autoridad_gestionar.php?exito=rechazado');
+                exit();
+            } else {
+                echo "Error al rechazar el reporte: " . $stmt->error;
+            }
+            exit();
+
         case 'resolver':
             // Solo cambia estatus a resuelto, estado ya debe ser aprobado
             $stmtCheck = $conn->prepare("SELECT estado FROM reportes WHERE id = ?");
@@ -44,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bind_param("si", $prioridad, $reporte_id);
 
             if ($stmt->execute()) {
-                header('Location: /VialBarinas/PHP/frontend/autoridad_gestionar.php');
+                header('Location: /VialBarinas/PHP/frontend/autoridad_reportes_aprobados.php?exito=resuelto');
                 exit();
             } else {
                 echo "Error al actualizar el estatus: " . $stmt->error;
@@ -53,16 +80,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         default:
             die('Acción no válida.');
-    }
-
-    $stmt = $conn->prepare("UPDATE reportes SET estado = ?, estatus = ?, prioridad = ? WHERE id = ?");
-    $stmt->bind_param("sssi", $estado, $estatus, $prioridad, $reporte_id);
-
-    if ($stmt->execute()) {
-        header('Location: /VialBarinas/PHP/frontend/autoridad_gestionar.php');
-        exit();
-    } else {
-        echo "Error al actualizar el reporte: " . $stmt->error;
     }
 } else {
     header('Location: /VialBarinas/index.php');

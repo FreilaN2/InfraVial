@@ -98,13 +98,16 @@ $result = $conn->query($query);
                         </span>
                     </td>
                     <td>
-                    <form action="/VialBarinas/PHP/backend/actualizar_estado.php" method="POST">
-                        <input type="hidden" name="reporte_id" value="<?= $row['id'] ?>">
-                        <input type="hidden" name="prioridad" value="<?= $row['prioridad'] ?>">
-                        <button name="accion" value="resolver" class="btn btn-warning btn-sm rounded-pill">
-                            <i class="bi bi-check2-square"></i> Marcar como resuelto
-                        </button>
-                    </form>
+                        <form method="POST" action="/VialBarinas/PHP/backend/actualizar_estado.php" class="form-resolver">
+                            <input type="hidden" name="reporte_id" value="<?= $row['id'] ?>">
+                            <input type="hidden" name="prioridad" value="<?= $row['prioridad'] ?>">
+                            <input type="hidden" name="accion" value="resolver">
+                            <button type="button" class="btn btn-success btn-sm rounded-pill d-flex align-items-center gap-1 shadow-sm px-3 py-1"
+                                    onclick="confirmarResolucion(this)">
+                                <i class="bi bi-check-circle-fill"></i>
+                                <span>Marcar como resuelto</span>
+                            </button>
+                        </form>
                     </td>
                 </tr>
             <?php endwhile; ?>
@@ -115,5 +118,48 @@ $result = $conn->query($query);
 
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+function confirmarResolucion(button) {
+    const form = button.closest('form');
+
+    Swal.fire({
+        icon: 'question',
+        title: '¿Marcar como resuelto?',
+        text: 'Este reporte pasará a estado resuelto.',
+        showCancelButton: true,
+        confirmButtonText: 'Confirmar',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true
+    }).then((result) => {
+        if (result.isConfirmed) {
+            form.submit();
+        }
+    });
+}
+</script>
+
+<?php if (isset($_GET['exito']) && $_GET['exito'] === 'resuelto'): ?>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: 'success',
+        title: 'Reporte marcado como resuelto',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true
+    });
+
+    // Limpiar la URL
+    const url = new URL(window.location);
+    url.searchParams.delete('exito');
+    window.history.replaceState({}, document.title, url);
+});
+</script>
+<?php endif; ?>
+
+
 
 <?php include_once('../../Templates/footer.php'); ?>

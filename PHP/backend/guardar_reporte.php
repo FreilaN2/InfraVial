@@ -49,13 +49,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param('ssssssssi', $titulo, $descripcion, $tipo_incidente, $latitud, $longitud, $estado, $fecha_reporte, $fotoDestino, $usuario_id);
 
     if ($stmt->execute()) {
-        echo "<script>
-            alert('Reporte enviado correctamente');
-            setTimeout(() => {
-                window.location.href = '/VialBarinas/PHP/frontend/inicio.php';
-            }, 1000);
-        </script>";
-        exit();
+echo "
+<!DOCTYPE html>
+<html lang='es'>
+<head>
+    <meta charset='UTF-8'>
+    <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+            <style>
+            body {
+                font-family: Arial, sans-serif;
+            }
+        </style>
+</head>
+<body>
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: '¡Reporte enviado!',
+            text: 'Gracias por tu colaboración.',
+            timer: 3000,
+            showConfirmButton: false,
+            timerProgressBar: true
+        });
+
+        setTimeout(() => {
+            window.location.href = '/VialBarinas/PHP/frontend/inicio.php';
+        }, 3000);
+    </script>
+</body>
+</html>
+";
+exit;
+
     } else {
         echo 'Error al guardar el reporte: ' . $stmt->error;
     }
